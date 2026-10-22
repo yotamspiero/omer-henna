@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Omer's Guest List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:wght@400;500&family=Frank+Ruhl+Libre:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* Same paper and ink as the invitation; a working list, scanned not read. */
+:root{
+  --paper:#fffdfb;--card:#ffffff;--ink:#8a6a55;--ink-deep:#6e5242;--ink-soft:#b79579;--line:#ece2d7;
+  --yes:#5d7a4f;--yes-bg:#eef3e9;--no:#a4573f;--no-bg:#f7ebe5;
+  --f-script:"Pinyon Script",cursive;--f-head:"Cormorant Garamond","Frank Ruhl Libre",Georgia,serif;
+  --f-num:var(--f-head);--f-ui:var(--f-head);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink-deep);font-family:var(--f-ui);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding-block:36px 64px}
+header{text-align:center;margin-bottom:30px}
+header .script{font-family:var(--f-script);font-size:58px;line-height:1;color:var(--ink);direction:ltr;margin:0}
+header h1{font-family:var(--f-head);font-weight:400;font-size:24px;margin:4px 0 2px}
+header p{margin:0;color:var(--ink-soft);font-size:15px}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center}
+.stat b{display:block;font-family:var(--f-num);font-weight:500;font-size:40px;line-height:1.1;color:var(--ink-deep);font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--ink)}
+.stat.main{background:var(--ink-deep);border-color:var(--ink-deep)}
+.stat.main b,.stat.main span{color:var(--paper)}
+
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.bar input{flex:1 1 180px;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 16px}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:9px 14px;cursor:pointer;font-size:15px}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.actions{display:flex;gap:10px;margin-inline-start:auto}
+.btn{border:1px solid var(--ink-soft);background:none;border-radius:999px;padding:9px 18px;cursor:pointer;color:var(--ink-deep);white-space:nowrap}
+.btn.solid{background:var(--ink-deep);border-color:var(--ink-deep);color:var(--paper)}
+.btn:disabled{opacity:.5;cursor:default}
+
+.list{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:13px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .nm{min-width:0;overflow-wrap:anywhere;font-family:var(--f-head);font-size:18px}
+.row .nm small{display:block;font-family:var(--f-ui);font-size:13px;color:var(--ink-soft)}
+.pill{font-size:13px;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.pill.yes{background:var(--yes-bg);color:var(--yes)}
+.pill.no{background:var(--no-bg);color:var(--no)}
+.n{font-family:var(--f-num);font-size:24px;min-width:1.6em;text-align:center;font-variant-numeric:tabular-nums}
+.empty,.msg{padding:40px 20px;text-align:center;color:var(--ink)}
+.msg b{display:block;font-family:var(--f-head);font-weight:400;font-size:20px;color:var(--ink-deep);margin-bottom:6px}
+.foot{margin-top:12px;text-align:center;font-size:13px;color:var(--ink-soft)}
+@media (max-width:480px){.actions{width:100%;margin:0}.actions .btn{flex:1}.stat b{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="script">Omer</p>
+    <h1>אישורי הגעה · ערב המקווה חינה</h1>
+    <p>יום רביעי, 25.11.26 · 19:30 · תלמי מנשה</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat main"><b id="sYes">–</b><span>מגיעות</span></div>
+    <div class="stat"><b id="sNo">–</b><span>לא מגיעות</span></div>
+    <div class="stat"><b id="sAll">–</b><span>סה״כ תשובות</span></div>
+  </div>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="חיפוש לפי שם" aria-label="חיפוש לפי שם">
+    <div class="seg" role="group" aria-label="סינון">
+      <button type="button" data-f="all" aria-pressed="true">כולם</button>
+      <button type="button" data-f="yes" aria-pressed="false">מגיעות</button>
+      <button type="button" data-f="no" aria-pressed="false">לא מגיעות</button>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn" id="refresh">רענון</button>
+      <button type="button" class="btn solid" id="xlsx" disabled>הורדה לאקסל</button>
+    </div>
+  </div>
+
+  <div class="list" id="list"><div class="msg">טוען את הרשימה…</div></div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+  "use strict";
+  var CFG = window.OMER_CONFIG || {};
+  var key = new URLSearchParams(location.search).get("key") || "";
+  var rows = [], filter = "all", loadedAt = null;
+  var $ = function(id){ return document.getElementById(id); };
+
+  function msg(title, text){ $("list").innerHTML = '<div class="msg"><b></b><span></span></div>'; $("list").querySelector("b").textContent = title; $("list").querySelector("span").textContent = text || ""; }
+  function fmt(iso){
+    var d = new Date(iso); if(isNaN(d)) return "";
+    return d.toLocaleDateString("he-IL",{day:"numeric",month:"numeric"}) + " · " + d.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"});
+  }
+
+  function render(){
+    var yes = rows.filter(function(r){return r.status==="yes"});
+    $("sYes").textContent = yes.length;
+    $("sAll").textContent = rows.length;
+    $("sNo").textContent = rows.length - yes.length;
+    $("xlsx").disabled = !rows.length;
+
+    var q = $("q").value.trim();
+    var shown = rows.filter(function(r){
+      return (filter==="all" || r.status===filter) && (!q || String(r.name).indexOf(q) !== -1);
+    }).sort(function(a,b){ return String(b.at).localeCompare(String(a.at)); });
+
+    var list = $("list"); list.innerHTML = "";
+    if(!rows.length){ msg("עדיין אין אישורים", "כשאורחים יאשרו הגעה, הם יופיעו כאן."); }
+    else if(!shown.length){ msg("אין תוצאות", "נסו חיפוש אחר."); }
+    shown.forEach(function(r){
+      var el = document.createElement("div"); el.className = "row";
+      var nm = document.createElement("div"); nm.className = "nm"; nm.textContent = r.name;
+      var sm = document.createElement("small"); sm.textContent = fmt(r.at); nm.appendChild(sm);
+      var pill = document.createElement("span"); pill.className = "pill " + r.status; pill.textContent = r.status==="yes" ? "מגיעה" : "לא מגיעה";
+      el.appendChild(nm); el.appendChild(pill); list.appendChild(el);
+    });
+    $("foot").textContent = loadedAt ? "עודכן לאחרונה ב-" + loadedAt.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"}) + " · מתעדכן לבד כל דקה" : "";
+  }
+
+  function load(){
+    if(!CFG.endpoint){ msg("ההזמנה עוד לא מחוברת לגיליון", "צריך להדביק את כתובת ה-Apps Script בקובץ config.js."); return; }
+    if(!key){ msg("חסר מפתח בקישור", "פתחו את הקישור המלא שקיבלתם, עם ?key= בסופו."); return; }
+    $("refresh").disabled = true;
+    fetch(CFG.endpoint + "?key=" + encodeURIComponent(key) + "&t=" + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d.ok){ msg("המפתח בקישור לא נכון", "בדקו שהקישור הועתק במלואו."); return; }
+        rows = d.rows || []; loadedAt = new Date(); render();
+      })
+      .catch(function(){ if(!rows.length) msg("לא הצלחתי לטעון את הרשימה", "בדקו את החיבור לאינטרנט ולחצו רענון."); })
+      .then(function(){ $("refresh").disabled = false; });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){
+    b.addEventListener("click", function(){
+      filter = b.dataset.f;
+      Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(x){ x.setAttribute("aria-pressed", String(x===b)); });
+      render();
+    });
+  });
+  $("q").addEventListener("input", render);
+  $("refresh").addEventListener("click", load);
+  $("xlsx").addEventListener("click", function(){
+    if(!window.XLSX) return;
+    var data = [["שם","תשובה","עודכן"]].concat(
+      rows.slice().sort(function(a,b){ return a.status===b.status ? String(a.name).localeCompare(String(b.name),"he") : (a.status==="yes"?-1:1); })
+        .map(function(r){ return [r.name, r.status==="yes"?"מגיעה":"לא מגיעה", fmt(r.at)]; })
+    );
+    data.push([], ["סה״כ מגיעות", rows.filter(function(r){return r.status==="yes"}).length]);
+    var ws = XLSX.utils.aoa_to_sheet(data);
+    ws["!cols"] = [{wch:26},{wch:12},{wch:16}];
+    var wb = XLSX.utils.book_new(); wb.Workbook = { Views:[{RTL:true}] };
+    XLSX.utils.book_append_sheet(wb, ws, "אישורי הגעה");
+    XLSX.writeFile(wb, "omer-henna-rsvp.xlsx");
+  });
+
+  load();
+  setInterval(function(){ if(!document.hidden) load(); }, 60000);
+})();
+</script>
+</body>
+</html>
