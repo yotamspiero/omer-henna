@@ -31,7 +31,7 @@
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none;background:var(--paper)}
-body{color:var(--ink);font-family:var(--serif);font-weight:400;font-size:18px;line-height:1.6;-webkit-text-size-adjust:100%}
+body{color:var(--ink);font-family:var(--serif);font-weight:400;font-size:18px;line-height:1.6;-webkit-text-size-adjust:100%;font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1}
 a{color:inherit}
 button,input{font:inherit;color:inherit}
 :focus-visible{outline:1px solid var(--ink);outline-offset:4px}
@@ -121,6 +121,9 @@ body.typing .panel[data-i="4"] .slot{height:0}
 
 /* pager */
 .pager{position:absolute;left:0;right:0;bottom:20px;z-index:4;display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .3s}
+body.last .pager .label{display:none}
+.panel[data-i="4"] .rsvp-form{gap:clamp(10px,1.6svh,14px)}
+.panel[data-i="4"] .he-caps[for=name]{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .pager .label{font-size:12px;letter-spacing:.1em;color:var(--ink-soft);direction:ltr;font-variant-numeric:tabular-nums}
 .pager .dots{display:flex;gap:4px;direction:ltr}
 .pager button{width:26px;height:26px;border:0;background:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -322,6 +325,7 @@ body.typing .music{opacity:0;pointer-events:none}
     Array.prototype.forEach.call(dots.children, function(b, k){ if(k === i) b.setAttribute("aria-current","step"); else b.removeAttribute("aria-current"); });
     $("pLabel").textContent = "0" + (i + 1) + " / 0" + N + "  ·  " + labels[i];
     $("hint").style.opacity = i === 0 ? 1 : 0;
+    document.body.classList.toggle("last", i === N - 1);
     $("dragHint").style.opacity = (i === 0 && !dragged) ? 1 : 0;
     var off = String(1 - (0.04 + 0.96 * i / (N - 1)));
     $("prog").style.strokeDashoffset = off; $("glow").style.strokeDashoffset = off;
